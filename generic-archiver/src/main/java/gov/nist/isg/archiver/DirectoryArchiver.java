@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Antoine Vandecreme (Initial implementation)
  * @author Julien Amelot (Added multi-process)
  */
@@ -27,19 +26,16 @@ public class DirectoryArchiver implements FilesArchiver {
 
     private final File directory;
 
-    private static final Logger logger = Logger.getLogger(
-            DirectoryArchiver.class.getName());
+    private static final Logger logger = Logger.getLogger(DirectoryArchiver.class.getName());
 
     public DirectoryArchiver(File directory) throws IOException {
         if (directory.exists()) {
             if (!directory.isDirectory()) {
-                throw new IOException("The path '" + directory
-                        + "' is not a directory.");
+                throw new IOException("The path '" + directory + "' is not a directory.");
             }
         } else {
             //attempts to create it
             int attempts = 0;
-
             while (!directory.exists()) {
                 /**
                  * check if the directory still does not exists it could have
@@ -47,75 +43,49 @@ public class DirectoryArchiver implements FilesArchiver {
                  * check e.g. the thread processing the second image fails as
                  * the thread processing the 1st image is working on creating
                  * the directory
-                 *
                  */
                 attempts++;
                 boolean created = directory.mkdirs();
-
                 if (!created) {
                     //could not create the directory
-
                     if (attempts > 10) {
                         //we give up on trying
-                        throw new IOException("Cannot create directory '"
-                                + directory + "'");
+                        throw new IOException("Cannot create directory '" + directory + "'");
                     } else {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException ex) {
-                            throw new IOException("Interrupted while waiting to"
-                                    + " create directory " + directory, ex);
+                            throw new IOException("Interrupted while waiting to" + " create directory " + directory, ex);
                         }
                     }
-
                 }
             }
             if (attempts == 0) {
-                logger.log(Level.FINEST,
-                        "Directory was created (but not by this thread)");
+                logger.log(Level.FINEST, "Directory was created (but not by this thread)");
             } else {
-                logger.log(Level.FINEST,
-                        "Directory was created after {0} attempts", attempts);
+                logger.log(Level.FINEST, "Directory was created after {0} attempts", attempts);
             }
-
         }
         this.directory = directory;
     }
 
     @Override
-    public <T> T appendFile(String path, FileAppender<T> appender)
-            throws IOException {
-        File file = new File(directory, path);
-        File parent = file.getParentFile();
-        if (!parent.exists()) {
-            boolean created = parent.mkdirs();
-            if (!created) {
-                if (!parent.exists()) {
-                    throw new IOException("Cannot create directory " + parent);
-                } else {
-                    logger.log(Level.FINEST,
-                            "Directory was created (but not by us)");
-                }
-            }
-        }
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            return appender.append(fos);
-        }
+    public <T> T appendFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public <T> T appendBigFile(String path, FileAppender<T> appender)
-            throws IOException {
-        return appendFile(path, appender);
+    public <T> T appendBigFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void appendFile(String path, File file) throws IOException {
-        File outputFile = new File(directory, path);
-        Files.copy(file.toPath(), outputFile.toPath());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

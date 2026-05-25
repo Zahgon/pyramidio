@@ -38,33 +38,36 @@ import javax.imageio.stream.ImageInputStream;
 public class MistStitchedImageReader implements PartialImageReader {
 
     private final File tilesDirectory;
+
     private final FilenameConverter filenameConverter;
+
     private final List<ImageTile> tiles;
+
     private int tilesWidth;
+
     private int tilesHeight;
 
     private final int width;
+
     private final int height;
 
     // Sample image to easily create a similar image with the same type
     private BufferedImage sampleImage;
 
-    public MistStitchedImageReader(File positionFile, File tilesDirectory)
-            throws IOException {
+    public MistStitchedImageReader(File positionFile, File tilesDirectory) throws IOException {
         this(positionFile, tilesDirectory, new FilenameConverter() {
+
             @Override
             public String convert(String fileName) {
-                return fileName;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         });
     }
 
-    public MistStitchedImageReader(File positionFile, File tilesDirectory,
-            FilenameConverter converter) throws IOException {
+    public MistStitchedImageReader(File positionFile, File tilesDirectory, FilenameConverter converter) throws IOException {
         this.tilesDirectory = tilesDirectory;
         this.filenameConverter = converter;
         tiles = getTilesFromPositionFile(positionFile);
-
         int maxX = 0;
         int maxY = 0;
         for (ImageTile tile : tiles) {
@@ -83,8 +86,7 @@ public class MistStitchedImageReader implements PartialImageReader {
     private void loadTilesDetails(File file) throws IOException {
         try (ImageInputStream iis = ImageIO.createImageInputStream(file)) {
             if (iis == null) {
-                throw new IOException(
-                        "Can not create image input stream for file " + file);
+                throw new IOException("Can not create image input stream for file " + file);
             }
             Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
             if (!readers.hasNext()) {
@@ -94,7 +96,6 @@ public class MistStitchedImageReader implements PartialImageReader {
             reader.setInput(iis);
             tilesWidth = reader.getWidth(0);
             tilesHeight = reader.getHeight(0);
-
             ImageReadParam param = reader.getDefaultReadParam();
             // Read just one pixel
             param.setSourceRegion(new Rectangle(1, 1));
@@ -102,35 +103,26 @@ public class MistStitchedImageReader implements PartialImageReader {
         }
     }
 
-    private List<ImageTile> getTilesFromPositionFile(File positionFile)
-            throws IOException {
+    private List<ImageTile> getTilesFromPositionFile(File positionFile) throws IOException {
         String patternStr = "(\\S+): (\\S+|\\(\\S+, \\S+\\));";
         Pattern pattern = Pattern.compile(patternStr);
-
         List<ImageTile> tileList = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(
-                new FileReader(positionFile))) {
-
+        try (BufferedReader br = new BufferedReader(new FileReader(positionFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 File file = null;
                 double correlation = 0;
                 int xPos = 0;
                 int yPos = 0;
-
                 Matcher matcher = pattern.matcher(line);
                 while (matcher.find()) {
                     if (matcher.groupCount() == 2) {
                         String key = matcher.group(1);
                         String value = matcher.group(2);
-
-                        switch (key) {
+                        switch(key) {
                             case "file":
-                                file = new File(tilesDirectory,
-                                        filenameConverter.convert(value));
-                                if (tilesWidth == 0 || tilesHeight == 0
-                                        || sampleImage == null) {
+                                file = new File(tilesDirectory, filenameConverter.convert(value));
+                                if (tilesWidth == 0 || tilesHeight == 0 || sampleImage == null) {
                                     loadTilesDetails(file);
                                 }
                                 break;
@@ -155,53 +147,34 @@ public class MistStitchedImageReader implements PartialImageReader {
                         }
                     }
                 }
-                tileList.add(new ImageTile(
-                        file,
-                        new Rectangle(xPos, yPos, tilesWidth, tilesHeight),
-                        correlation));
+                tileList.add(new ImageTile(file, new Rectangle(xPos, yPos, tilesWidth, tilesHeight), correlation));
             }
         }
-
         return tileList;
     }
 
     @Override
     public BufferedImage read() throws IOException {
-        return read(new Rectangle(width, height));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BufferedImage read(Rectangle rectangle) throws IOException {
-        Blender blender = new NormalBlender(rectangle.width, rectangle.height,
-                sampleImage);
-        for (ImageTile tile : tiles) {
-            Rectangle intersection
-                    = tile.getIntersectionWithStitchedImageRegion(rectangle);
-            if (intersection.isEmpty()) {
-                continue;
-            }
-            BufferedImage region = tile.readStitchedImageRegion(rectangle);
-
-            blender.blend(region,
-                    intersection.x - rectangle.x,
-                    intersection.y - rectangle.y);
-        }
-
-        return blender.getResult();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getWidth() {
-        return width;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getHeight() {
-        return height;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public List<ImageTile> getTiles() {
-        return Collections.unmodifiableList(tiles);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

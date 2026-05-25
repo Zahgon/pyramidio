@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class BufferedImageHelper {
@@ -33,21 +32,7 @@ public class BufferedImageHelper {
      * will be created.
      * @return
      */
-    public static BufferedImage createBufferedImage(int width, int height,
-            BufferedImage image) {
-        Hashtable<String, Object> properties = null;
-        String[] propertyNames = image.getPropertyNames();
-        if (propertyNames != null) {
-            properties = new Hashtable<>(propertyNames.length);
-            for (String propertyName : propertyNames) {
-                properties.put(propertyName, image.getProperty(propertyName));
-            }
-        }
-        return new BufferedImage(
-                image.getColorModel(),
-                image.getRaster().createCompatibleWritableRaster(width, height),
-                image.isAlphaPremultiplied(),
-                properties);
+    public static BufferedImage createBufferedImage(int width, int height, BufferedImage image) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

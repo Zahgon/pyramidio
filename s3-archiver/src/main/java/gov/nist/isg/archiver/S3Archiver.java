@@ -22,12 +22,12 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- *
  * @author Gulam D. Shakir
  */
 public class S3Archiver implements FilesArchiver {
 
     private final String bucket;
+
     private final String prefix;
 
     public S3Archiver(URI outputURI) {
@@ -36,41 +36,27 @@ public class S3Archiver implements FilesArchiver {
         AmazonS3Client client = new AmazonS3Client();
         ObjectListing listing = client.listObjects(bucket, prefix);
         if (!listing.getObjectSummaries().isEmpty()) {
-            throw new IllegalStateException(
-                    "The bucket path exists: " + bucket + "/" + prefix);
+            throw new IllegalStateException("The bucket path exists: " + bucket + "/" + prefix);
         }
     }
 
     @Override
-    public <T> T appendFile(String path, FileAppender<T> appender)
-            throws IOException {
-        final String s3key = prefix + "/" + path;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        T result = appender.append(out);
-        AmazonS3Client client = new AmazonS3Client();
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(out.size());
-        client.putObject(bucket, s3key, new ByteArrayInputStream(
-                out.toByteArray()), metadata);
-        return result;
+    public <T> T appendFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public <T> T appendBigFile(String path, FileAppender<T> appender)
-            throws IOException {
-        return appendFile(path, appender);
+    public <T> T appendBigFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void appendFile(String path, File file) throws IOException {
-        final String s3key = prefix + "/" + path;
-        AmazonS3Client client = new AmazonS3Client();
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.length());
-        client.putObject(bucket, s3key, new FileInputStream(file), metadata);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -16,30 +16,20 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 class ImageReaderCache {
 
     private final BufferedImage cachedImage;
+
     private final Rectangle cachedRegion;
 
-    ImageReaderCache(PartialImageReader imageReader, Rectangle cacheRegion)
-            throws IOException {
+    ImageReaderCache(PartialImageReader imageReader, Rectangle cacheRegion) throws IOException {
         cachedImage = imageReader.read(cacheRegion);
         cachedRegion = cacheRegion;
     }
 
     BufferedImage read(Rectangle rectangle) throws IOException {
-        if (!cachedRegion.contains(rectangle)) {
-            throw new IOException(rectangle + " is outside of cached region "
-                    + cachedRegion);
-        }
-        return cachedImage.getSubimage(
-                rectangle.x - cachedRegion.x,
-                rectangle.y - cachedRegion.y,
-                rectangle.width,
-                rectangle.height);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

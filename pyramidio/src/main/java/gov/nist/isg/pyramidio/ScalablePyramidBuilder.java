@@ -28,8 +28,11 @@ import javax.imageio.ImageIO;
 public class ScalablePyramidBuilder {
 
     private final int tileSize;
+
     private final int overlap;
+
     private final String tileFormat;
+
     private final String descriptorExt;
 
     public ScalablePyramidBuilder() {
@@ -44,8 +47,7 @@ public class ScalablePyramidBuilder {
      * @param tileFormat the file format to use for the tiles (default png)
      * @param descriptorExt the descriptor extension (default dzi)
      */
-    public ScalablePyramidBuilder(int tileSize, int overlap, String tileFormat,
-            String descriptorExt) {
+    public ScalablePyramidBuilder(int tileSize, int overlap, String tileFormat, String descriptorExt) {
         this.tileSize = tileSize;
         this.overlap = overlap;
         this.tileFormat = tileFormat;
@@ -61,9 +63,8 @@ public class ScalablePyramidBuilder {
      * @param archiver the archiver to use to store the image
      * @throws IOException
      */
-    public void buildPyramid(PartialImageReader imageReader, String fileName,
-            FilesArchiver archiver) throws IOException {
-        buildPyramid(imageReader, fileName, archiver, 1);
+    public void buildPyramid(PartialImageReader imageReader, String fileName, FilesArchiver archiver) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -75,9 +76,8 @@ public class ScalablePyramidBuilder {
      * @param parallelism the parallelism level
      * @throws IOException
      */
-    public void buildPyramid(PartialImageReader imageReader, String fileName,
-            FilesArchiver archiver, int parallelism) throws IOException {
-        buildPyramid(imageReader, fileName, archiver, parallelism, 0);
+    public void buildPyramid(PartialImageReader imageReader, String fileName, FilesArchiver archiver, int parallelism) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -92,11 +92,7 @@ public class ScalablePyramidBuilder {
      * entire image. Default to 0.
      * @throws IOException
      */
-    public void buildPyramid(PartialImageReader imageReader, String fileName,
-            FilesArchiver archiver, int parallelism, float maxImageCachePercentage) throws IOException {
-        new TileBuilder(tileSize, overlap, tileFormat, descriptorExt,
-                imageReader, fileName, archiver)
-                .build(parallelism, maxImageCachePercentage);
+    public void buildPyramid(PartialImageReader imageReader, String fileName, FilesArchiver archiver, int parallelism, float maxImageCachePercentage) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

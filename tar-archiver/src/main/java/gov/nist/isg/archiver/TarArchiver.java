@@ -22,7 +22,6 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class TarArchiver implements FilesArchiver {
@@ -38,50 +37,22 @@ public class TarArchiver implements FilesArchiver {
     }
 
     @Override
-    public <T> T appendFile(String path, FileAppender<T> appender)
-            throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        T result = appender.append(baos);
-        TarArchiveEntry entry = new TarArchiveEntry(path);
-        entry.setSize(baos.size());
-        synchronized (this) {
-            tarOutput.putArchiveEntry(entry);
-            tarOutput.write(baos.toByteArray());
-            tarOutput.closeArchiveEntry();
-        }
-        return result;
+    public <T> T appendFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public <T> T appendBigFile(String path, FileAppender<T> appender)
-            throws IOException {
-        File tempFile = File.createTempFile("tarArchiver", ".tmp");
-        try {
-            T result;
-            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-                result = appender.append(fos);
-            }
-            appendFile(path, tempFile);
-            return result;
-        } finally {
-            tempFile.delete();
-        }
+    public <T> T appendBigFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void appendFile(String path, File file) throws IOException {
-        TarArchiveEntry entry = new TarArchiveEntry(file, path);
-        synchronized (this) {
-            tarOutput.putArchiveEntry(entry);
-            try (FileInputStream fis = new FileInputStream(file)) {
-                IOUtils.copy(fis, tarOutput);
-            }
-            tarOutput.closeArchiveEntry();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void close() throws IOException {
-        tarOutput.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class ImageResizingHelper {
@@ -35,50 +34,14 @@ public class ImageResizingHelper {
      * @param img the image to be resized
      * @return the resized image
      */
-    public static BufferedImage resizeImage(BufferedImage img,
-            int width, int height) {
-        int currentWidth = img.getWidth();
-        int currentHeight = img.getHeight();
-        if (currentWidth == width && currentHeight == height) {
-            return img;
-        }
-        if (img.getType() == BufferedImage.TYPE_USHORT_GRAY) {
-            return resize16bppImage(img, width, height);
-        }
-        if (img.getColorModel().getPixelSize() == 32) {
-            return resize32bppImage(img, width, height);
-        }
-
-        if (width > currentWidth || height > currentHeight) {
-            return resizeImageGraphics2D(img, width, height);
-        } else {
-            BufferedImage result = img;
-            double ratio = 0.79;
-            do {
-                if (currentWidth > width) {
-                    currentWidth *= ratio;
-                    if (currentWidth < width) {
-                        currentWidth = width;
-                    }
-                }
-                if (currentHeight > height) {
-                    currentHeight *= ratio;
-                    if (currentHeight < height) {
-                        currentHeight = height;
-                    }
-                }
-                result = resizeImageGraphics2D(result, currentWidth, currentHeight);
-            } while (currentWidth != width || currentHeight != height);
-            return result;
-        }
+    public static BufferedImage resizeImage(BufferedImage img, int width, int height) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    private static BufferedImage resizeImageGraphics2D(BufferedImage img,
-            int width, int height) {
+    private static BufferedImage resizeImageGraphics2D(BufferedImage img, int width, int height) {
         BufferedImage result = new BufferedImage(width, height, img.getType());
         Graphics2D g = result.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
         g.drawImage(img, 0, 0, width, height, 0, 0, img.getWidth(), img.getHeight(), null);
         g.dispose();
         return result;
@@ -92,11 +55,9 @@ public class ImageResizingHelper {
      * @param dstHeight
      * @return
      */
-    private static BufferedImage resize16bppImage(BufferedImage img,
-            int dstWidth, int dstHeight) {
+    private static BufferedImage resize16bppImage(BufferedImage img, int dstWidth, int dstHeight) {
         BufferedImage result = new BufferedImage(dstWidth, dstHeight, img.getType());
         WritableRaster raster = result.getRaster();
-
         int width = img.getWidth();
         int height = img.getHeight();
         double srcCenterX = width / 2.0;
@@ -105,7 +66,6 @@ public class ImageResizingHelper {
         double yScale = dstHeight / (double) height;
         double dstCenterX = (dstWidth + xScale) / 2;
         double dstCenterY = (dstHeight + yScale) / 2;
-
         for (int y = 0; y < dstHeight; y++) {
             double ys = (y - dstCenterY) / yScale + srcCenterY;
             for (int x = 0; x < dstWidth; x++) {
@@ -123,12 +83,9 @@ public class ImageResizingHelper {
         return result;
     }
 
-    private static BufferedImage resize32bppImage(BufferedImage img,
-            int dstWidth, int dstHeight) {
-        BufferedImage result = BufferedImageHelper.createBufferedImage(
-                dstWidth, dstHeight, img);
+    private static BufferedImage resize32bppImage(BufferedImage img, int dstWidth, int dstHeight) {
+        BufferedImage result = BufferedImageHelper.createBufferedImage(dstWidth, dstHeight, img);
         WritableRaster raster = result.getRaster();
-
         int width = img.getWidth();
         int height = img.getHeight();
         double srcCenterX = width / 2.0;
@@ -137,7 +94,6 @@ public class ImageResizingHelper {
         double yScale = dstHeight / (double) height;
         double dstCenterX = (dstWidth + xScale) / 2;
         double dstCenterY = (dstHeight + yScale) / 2;
-
         for (int y = 0; y < dstHeight; y++) {
             double ys = (y - dstCenterY) / yScale + srcCenterY;
             for (int x = 0; x < dstWidth; x++) {
@@ -154,11 +110,11 @@ public class ImageResizingHelper {
      * Algorithmic Introduction Using Java" by Burger and Burge
      * (http://www.imagingbook.com/).
      */
-    private static double getBicubicInterpolatedPixel(BufferedImage image,
-            double x0, double y0) {
+    private static double getBicubicInterpolatedPixel(BufferedImage image, double x0, double y0) {
         int width = image.getWidth();
         int height = image.getHeight();
-        int u0 = (int) Math.floor(x0);	//use floor to handle negative coordinates too
+        //use floor to handle negative coordinates too
+        int u0 = (int) Math.floor(x0);
         int v0 = (int) Math.floor(y0);
         if (u0 <= 0 || u0 >= width - 2 || v0 <= 0 || v0 >= height - 2) {
             return getBilinearInterpolatedPixel(image, x0, y0);
@@ -177,8 +133,7 @@ public class ImageResizingHelper {
         return q;
     }
 
-    private static double getBilinearInterpolatedPixel(BufferedImage image,
-            double x, double y) {
+    private static double getBilinearInterpolatedPixel(BufferedImage image, double x, double y) {
         int width = image.getWidth();
         int height = image.getHeight();
         if (x < -1 || x >= width || y < -1 || y >= height) {
@@ -187,7 +142,6 @@ public class ImageResizingHelper {
         if (width == 1 && height == 1) {
             return image.getRaster().getSampleDouble(0, 0, 0);
         }
-
         if (x < 0.0) {
             x = 0.0;
         }
@@ -254,7 +208,8 @@ public class ImageResizingHelper {
             x = -x;
         }
         double z = 0.0;
-        double a = 0.5;// Catmull-Rom interpolation
+        // Catmull-Rom interpolation
+        double a = 0.5;
         if (x < 1.0) {
             z = x * x * (x * (-a + 2.0) + (a - 3.0)) + 1.0;
         } else if (x < 2.0) {

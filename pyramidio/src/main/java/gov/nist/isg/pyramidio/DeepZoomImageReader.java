@@ -36,13 +36,21 @@ import org.apache.commons.io.FilenameUtils;
 public class DeepZoomImageReader implements PartialImageReader {
 
     private final File dziFile;
+
     private final File filesFolder;
+
     private final int tileSize;
+
     private final int overlap;
+
     private final String format;
+
     private final int width;
+
     private final int height;
+
     private final int maxLevel;
+
     private final ImageTypeSpecifier rawImageType;
 
     public DeepZoomImageReader(File dziFile) throws IOException {
@@ -62,7 +70,6 @@ public class DeepZoomImageReader implements PartialImageReader {
         format = df.getFormat();
         width = df.getWidth();
         height = df.getHeight();
-
         if (tileExample == null) {
             tileExample = getFilesOfLevel(0).get(0);
         }
@@ -71,49 +78,48 @@ public class DeepZoomImageReader implements PartialImageReader {
             reader.setInput(iis);
             this.rawImageType = reader.getRawImageType(0);
         }
-
         int maxDim = Math.max(width, height);
         maxLevel = (int) Math.ceil(Math.log(maxDim) / Math.log(2));
     }
 
     public File getDziFile() {
-        return dziFile;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public File getFilesFolder() {
-        return filesFolder;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public int getTileSize() {
-        return tileSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public int getOverlap() {
-        return overlap;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getFormat() {
-        return format;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getWidth() {
-        return width;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getHeight() {
-        return height;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BufferedImage read() throws IOException {
-        return getWholeImage(1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BufferedImage read(Rectangle rectangle) throws IOException {
-        return getRegion(rectangle, 1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -124,7 +130,7 @@ public class DeepZoomImageReader implements PartialImageReader {
      * @throws IOException
      */
     public BufferedImage getWholeImage(double zoom) throws IOException {
-        return getRegion(new Rectangle(width, height), zoom);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -137,39 +143,7 @@ public class DeepZoomImageReader implements PartialImageReader {
      * @throws IOException
      */
     public BufferedImage getRegion(Rectangle region, double zoom) throws IOException {
-        if (region == null || region.isEmpty()) {
-            throw new IllegalArgumentException("Region cannot be empty.");
-        }
-
-        int resultWidth = (int) Math.round(region.width * zoom);
-        int resultHeight = (int) Math.round(region.height * zoom);
-        if (resultWidth < 1 || resultHeight < 1) {
-            throw new IllegalArgumentException("Zoom too small for width or height.");
-        }
-
-        Rectangle imageArea = new Rectangle(width, height);
-        Rectangle intersection = imageArea.intersection(region);
-        if (region.equals(intersection)) {
-            return getSubImage(region, zoom);
-        }
-
-        BufferedImage result;
-        synchronized (this) {
-            result = rawImageType.createBufferedImage(
-                    resultWidth, resultHeight);
-        }
-
-        if (!intersection.isEmpty()) {
-            BufferedImage subimage = getSubImage(intersection, zoom);
-            int intersectionX = region.x < 0
-                    ? (int) Math.round(-region.x * zoom) : 0;
-            int intersectionY = region.y < 0
-                    ? (int) Math.round(-region.y * zoom) : 0;
-            result.getRaster().setRect(intersectionX, intersectionY,
-                    subimage.getRaster());
-            subimage.flush();
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -181,122 +155,15 @@ public class DeepZoomImageReader implements PartialImageReader {
      * @return
      * @throws IOException
      */
-    public BufferedImage getSubImage(Rectangle region, double zoom)
-            throws IOException {
-        if (region == null || region.isEmpty()) {
-            throw new IllegalArgumentException("Region cannot be empty.");
-        }
-
-        Rectangle wholeImage = new Rectangle(width, height);
-        if (!wholeImage.contains(region)) {
-            throw new IllegalArgumentException("Region outside image.");
-        }
-
-        int resultWidth = (int) Math.round(region.width * zoom);
-        int resultHeight = (int) Math.round(region.height * zoom);
-
-        if (resultWidth < 1 || resultHeight < 1) {
-            throw new IllegalArgumentException("Zoom too small for width or height.");
-        }
-
-        int level = getClosestLevel(zoom);
-        double zoomOfLevel = getZoomOfLevel(level);
-        int x = (int) Math.round(region.x * zoomOfLevel);
-        int y = (int) Math.round(region.y * zoomOfLevel);
-        int w = (int) Math.round(region.width * zoomOfLevel);
-        int h = (int) Math.round(region.height * zoomOfLevel);
-
-        BufferedImage image = readRegionOfLevel(new Rectangle(x, y, w, h), level);
-        return ImageResizingHelper.resizeImage(image, resultWidth, resultHeight);
+    public BufferedImage getSubImage(Rectangle region, double zoom) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    public BufferedImage readRegionOfLevel(Rectangle region, int level)
-            throws IOException {
-        int firstTileColumn = region.x / tileSize;
-        if (tileSize * (firstTileColumn + 1) - overlap <= region.x) {
-            firstTileColumn++;
-        }
-        int firstTileRow = region.y / tileSize;
-        if (tileSize * (firstTileRow + 1) - overlap <= region.y) {
-            firstTileRow++;
-        }
-        int lastTileColumn = (region.x + region.width) / tileSize;
-        if (tileSize * lastTileColumn + overlap >= region.x + region.width
-                && lastTileColumn != 0) {
-            lastTileColumn--;
-        }
-        int lastTileRow = (region.y + region.height) / tileSize;
-        if (tileSize * lastTileRow + overlap >= region.y + region.height
-                && lastTileRow != 0) {
-            lastTileRow--;
-        }
-
-        BufferedImage result = null;
-        WritableRaster raster = null;
-        int dx = 0;
-        for (int i = firstTileColumn; i <= lastTileColumn; i++) {
-            int x;
-            int w;
-            if (i == firstTileColumn) {
-                x = region.x - firstTileColumn * tileSize;
-                if (i == lastTileColumn) {
-                    w = region.width;
-                } else {
-                    w = tileSize - x;
-                }
-                if (firstTileColumn != 0) {
-                    x += overlap;
-                }
-            } else {
-                x = overlap;
-                if (i == lastTileColumn) {
-                    w = region.width - dx;
-                } else {
-                    w = tileSize;
-                }
-            }
-
-            int dy = 0;
-            for (int j = firstTileRow; j <= lastTileRow; j++) {
-                int y;
-                int h;
-                if (j == firstTileRow) {
-                    y = region.y - firstTileRow * tileSize;
-                    if (j == lastTileRow) {
-                        h = region.height;
-                    } else {
-                        h = tileSize - y;
-                    }
-                    if (firstTileRow != 0) {
-                        y += overlap;
-                    }
-                } else {
-                    y = overlap;
-                    if (j == lastTileRow) {
-                        h = region.height - dy;
-                    } else {
-                        h = tileSize;
-                    }
-                }
-
-                Rectangle area = new Rectangle(x, y, w, h);
-                BufferedImage tile = readRegionOfTile(area, level, i, j);
-                if (i == firstTileColumn && j == firstTileRow) {
-                    result = BufferedImageHelper.createBufferedImage(
-                            region.width, region.height, tile);
-                    raster = result.getRaster();
-                }
-                raster.setRect(dx, dy, tile.getRaster());
-                tile.flush();
-                dy += h;
-            }
-            dx += w;
-        }
-        return result;
+    public BufferedImage readRegionOfLevel(Rectangle region, int level) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    private BufferedImage readRegionOfTile(Rectangle region, int level,
-            int column, int row) throws IOException {
+    private BufferedImage readRegionOfTile(Rectangle region, int level, int column, int row) throws IOException {
         File levelFolder = new File(filesFolder, Integer.toString(level));
         File tile = new File(levelFolder, column + "_" + row + "." + format);
         try (ImageInputStream iis = ImageIO.createImageInputStream(tile)) {
@@ -322,15 +189,12 @@ public class DeepZoomImageReader implements PartialImageReader {
     private List<File> getFilesOfLevel(int level) {
         int widthOfLevel = 1;
         int heightOfLevel = 1;
-
         if (level != 0) {
             widthOfLevel = Math.min(2 * level, width);
             heightOfLevel = Math.min(2 * level, height);
         }
-
         int numColumns = (int) Math.ceil(widthOfLevel / (float) tileSize);
         int numRows = (int) Math.ceil(heightOfLevel / (float) tileSize);
-
         File levelFolder = new File(filesFolder, Integer.toString(level));
         ArrayList<File> result = new ArrayList<>(numColumns * numRows);
         for (int i = 0; i < numColumns; i++) {
@@ -342,8 +206,7 @@ public class DeepZoomImageReader implements PartialImageReader {
         return result;
     }
 
-    private static ImageReader getImageReader(ImageInputStream iis)
-            throws IOException {
+    private static ImageReader getImageReader(ImageInputStream iis) throws IOException {
         Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
         if (!readers.hasNext()) {
             throw new IOException("No compatible image reader found.");

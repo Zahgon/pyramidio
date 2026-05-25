@@ -14,7 +14,6 @@ package gov.nist.isg.archiver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -26,63 +25,34 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.util.ReflectionUtils;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class SequenceFileExtractor {
 
     private final Configuration conf;
+
     private final SequenceFile.Reader reader;
+
     private final Text currentFile;
+
     private final BytesWritable currentContent;
 
-    public SequenceFileExtractor(Path sequenceFile, Configuration conf)
-            throws IOException {
+    public SequenceFileExtractor(Path sequenceFile, Configuration conf) throws IOException {
         this.conf = conf;
-        reader = new SequenceFile.Reader(conf,
-                SequenceFile.Reader.file(sequenceFile));
-        currentFile = (Text) ReflectionUtils.newInstance(
-                reader.getKeyClass(), conf);
-        currentContent = (BytesWritable) ReflectionUtils.newInstance(
-                reader.getValueClass(), conf);
+        reader = new SequenceFile.Reader(conf, SequenceFile.Reader.file(sequenceFile));
+        currentFile = (Text) ReflectionUtils.newInstance(reader.getKeyClass(), conf);
+        currentContent = (BytesWritable) ReflectionUtils.newInstance(reader.getValueClass(), conf);
     }
 
     public List<String> getFilesList() throws IOException {
-        reader.sync(0);
-        List<String> result = new ArrayList<>();
-
-        while (reader.next(currentFile)) {
-            result.add(currentFile.toString());
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void extractAll(Path outputPath) throws IOException {
-        reader.sync(0);
-
-        while (reader.next(currentFile, currentContent)) {
-            Path file = new Path(outputPath, currentFile.toString());
-            FileSystem fs = file.getFileSystem(conf);
-            if (fs.exists(file)) {
-                throw new IOException("File " + file + " already exists.");
-            }
-            Path parent = file.getParent();
-            if (parent != null) {
-                if (!fs.exists(parent)) {
-                    fs.mkdirs(parent);
-                }
-            }
-            FSDataOutputStream stream = fs.create(file);
-            try {
-                stream.write(currentContent.getBytes(), 0,
-                        currentContent.getLength());
-            } finally {
-                IOUtils.closeStream(stream);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void close() throws IOException {
-        reader.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

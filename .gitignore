@@ -32,3 +32,7 @@ release.properties
 # IntelliJ
 .idea
 *.iml
+
+.aider*
+.commit0_scripts/
+.github/workflows/

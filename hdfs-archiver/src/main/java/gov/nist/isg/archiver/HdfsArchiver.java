@@ -22,25 +22,23 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class HdfsArchiver implements FilesArchiver {
 
     private final FileSystem fs;
+
     private final Path directory;
 
     public HdfsArchiver(String directory) throws IOException {
         this(new Path(directory), new Configuration());
     }
 
-    public HdfsArchiver(Path directory, Configuration conf)
-            throws IOException {
+    public HdfsArchiver(Path directory, Configuration conf) throws IOException {
         this(directory, directory.getFileSystem(conf));
     }
 
-    public HdfsArchiver(Path directory, FileSystem fs)
-            throws IOException {
+    public HdfsArchiver(Path directory, FileSystem fs) throws IOException {
         if (fs.exists(directory)) {
             if (!fs.isDirectory(directory)) {
                 throw new IOException("The path " + directory + " is not a directory.");
@@ -56,42 +54,22 @@ public class HdfsArchiver implements FilesArchiver {
     }
 
     @Override
-    public <T> T appendFile(String path, FileAppender<T> appender)
-            throws IOException {
-        Path file = new Path(directory, path);
-        Path parent = file.getParent();
-        if (!fs.exists(parent)) {
-            boolean created = fs.mkdirs(parent);
-            if (!created) {
-                throw new IOException("Cannot create directory " + parent);
-            }
-        }
-        try (FSDataOutputStream stream = fs.create(file)) {
-            return appender.append(stream);
-        }
+    public <T> T appendFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public <T> T appendBigFile(String path, FileAppender<T> appender)
-            throws IOException {
-        return appendFile(path, appender);
+    public <T> T appendBigFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void appendFile(String path, File file) throws IOException {
-        try (final FileInputStream fis = new FileInputStream(file)) {
-            appendFile(path, new FileAppender<Void>() {
-                @Override
-                public Void append(OutputStream outputStream) throws IOException {
-                    IOUtils.copy(fis, outputStream);
-                    return null;
-                }
-            });
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws IOException {
-        fs.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

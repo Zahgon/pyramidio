@@ -27,51 +27,29 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FilesArchiverFactory {
 
-    private static final Logger logger = Logger.getLogger(
-            FilesArchiverFactory.class.getName());
+    private static final Logger logger = Logger.getLogger(FilesArchiverFactory.class.getName());
 
     private static final String S3_SCHEME = "s3";
+
     private static final String FILE_SCHEME = "file";
+
     private static final String HDFS_SCHEME = "hdfs";
 
     private static final String EMPTY_STRING = "";
 
     private static final String TAR_EXTENSION = "tar";
+
     private static final String SEQ_EXTENSION = "seq";
 
-    public static FilesArchiver createFromURI(String uri)
-            throws IOException {
-        try {
-            URI outputURI = new URI(uri);
-            String scheme = outputURI.getScheme();
-            logger.info("Got scheme " + scheme + " for URI " + uri);
-
-            if (scheme == null || scheme.equalsIgnoreCase(EMPTY_STRING)) {
-                return makeDirectoryArchiver(new File(uri));
-            }
-            if (scheme.equalsIgnoreCase(FILE_SCHEME)) {
-                return makeDirectoryArchiver(new File(outputURI));
-            }
-            if (scheme.equalsIgnoreCase(HDFS_SCHEME)) {
-                return makeHdfsArchiver(uri);
-            }
-            if (scheme.equalsIgnoreCase(S3_SCHEME)) {
-                return makeS3Archiver(outputURI);
-            }
-            throw new IllegalArgumentException("Unsupported scheme " + scheme);
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(
-                    "Unable to parse the URI " + uri, e);
-        }
+    public static FilesArchiver createFromURI(String uri) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    private static FilesArchiver makeDirectoryArchiver(File outputFile)
-            throws IOException {
+    private static FilesArchiver makeDirectoryArchiver(File outputFile) throws IOException {
         String extension = FilenameUtils.getExtension(outputFile.getName());
         if (extension.equalsIgnoreCase(TAR_EXTENSION)) {
             if (outputFile.exists()) {
-                throw new IOException("The path '" + outputFile
-                        + "' already exists.");
+                throw new IOException("The path '" + outputFile + "' already exists.");
             }
             logger.info("Making tar archiver for " + outputFile);
             return new TarArchiver(outputFile);
@@ -80,8 +58,7 @@ public class FilesArchiverFactory {
         return new DirectoryArchiver(outputFile);
     }
 
-    private static FilesArchiver makeHdfsArchiver(String outputFolder)
-            throws IOException {
+    private static FilesArchiver makeHdfsArchiver(String outputFolder) throws IOException {
         String extension = FilenameUtils.getExtension(outputFolder);
         if (extension.equalsIgnoreCase(TAR_EXTENSION)) {
             return new TarOnHdfsArchiver(outputFolder);

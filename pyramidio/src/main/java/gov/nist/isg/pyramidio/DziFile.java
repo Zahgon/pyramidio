@@ -33,14 +33,18 @@ import org.xml.sax.SAXException;
 /**
  * DZI file reader and writer
  *
- * @author Antoine Vandecreme 
+ * @author Antoine Vandecreme
  */
 public class DziFile {
 
     private final int tileSize;
+
     private final int overlap;
+
     private final String format;
+
     private final int width;
+
     private final int height;
 
     public DziFile(int tileSize, int overlap, String format, int width, int height) {
@@ -60,11 +64,9 @@ public class DziFile {
             if (!"Image".equals(imageNode.getNodeName())) {
                 throw new IOException("Unsupported dzi file.");
             }
-
             tileSize = Integer.parseInt(imageNode.getAttribute("TileSize"));
             overlap = Integer.parseInt(imageNode.getAttribute("Overlap"));
             format = imageNode.getAttribute("Format");
-
             NodeList childNodes = imageNode.getChildNodes();
             int length = childNodes.getLength();
             String w = null;
@@ -85,59 +87,42 @@ public class DziFile {
     }
 
     public int getTileSize() {
-        return tileSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public int getOverlap() {
-        return overlap;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getFormat() {
-        return format;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public int getWidth() {
-        return width;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public int getHeight() {
-        return height;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public int getMaxLevel() {
-        int maxDim = Math.max(width, height);
-        return (int) Math.ceil(Math.log(maxDim) / Math.log(2));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void write(File file) throws FileNotFoundException, IOException {
-        try (OutputStreamWriter osw = new OutputStreamWriter(
-                new FileOutputStream(file))) {
-            osw.write(toXml());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void write(String name, FilesArchiver archiver) throws IOException {
-        archiver.appendFile(name, new FilesArchiver.FileAppender<Void>() {
-            @Override
-            public Void append(OutputStream outputStream) throws IOException {
-                try (Writer out = new OutputStreamWriter(outputStream,
-                        Charset.forName("UTF-8"))) {
-                    out.write(toXml());
-                }
-                return null;
-            }
-        });
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private String toXml() {
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-        sb.append("<Image TileSize=\"").append(tileSize).
-                append("\" Overlap=\"").append(overlap).append("\" Format=\"").
-                append(format).append(
-                        "\" xmlns=\"http://schemas.microsoft.com/deepzoom/2009\">\n");
-        sb.append("<Size Width=\"").append(width).append("\" Height=\"")
-                .append(height).append("\" />\n");
+        sb.append("<Image TileSize=\"").append(tileSize).append("\" Overlap=\"").append(overlap).append("\" Format=\"").append(format).append("\" xmlns=\"http://schemas.microsoft.com/deepzoom/2009\">\n");
+        sb.append("<Size Width=\"").append(width).append("\" Height=\"").append(height).append("\" />\n");
         sb.append("</Image>\n");
         return sb.toString();
     }

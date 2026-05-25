@@ -22,13 +22,14 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class ImageTile {
 
     private final File file;
+
     private final Rectangle region;
+
     private final double correlation;
 
     public ImageTile(File file, Rectangle region, double correlation) {
@@ -38,34 +39,23 @@ public class ImageTile {
     }
 
     public File getFile() {
-        return file;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Rectangle getRegion() {
-        return region;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public double getCorrelation() {
-        return correlation;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Rectangle getIntersectionWithStitchedImageRegion(Rectangle rectangle) {
-        return rectangle.intersection(region);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    public BufferedImage readStitchedImageRegion(Rectangle rectangle)
-            throws IOException {
-        Rectangle intersection = rectangle.intersection(this.region);
-        if (intersection.isEmpty()) {
-            return null;
-        }
-
-        Rectangle tileRegion = new Rectangle(
-                intersection.x - region.x,
-                intersection.y - region.y,
-                intersection.width,
-                intersection.height);
-        return readTileRegion(tileRegion);
+    public BufferedImage readStitchedImageRegion(Rectangle rectangle) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -76,18 +66,6 @@ public class ImageTile {
      * @throws IOException
      */
     public BufferedImage readTileRegion(Rectangle region) throws IOException {
-        try (ImageInputStream iis = ImageIO.createImageInputStream(file)) {
-            Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-            if (!readers.hasNext()) {
-                throw new IOException("No image reader found for file " + file);
-            }
-            ImageReader reader = readers.next();
-            reader.setInput(iis);
-
-            ImageReadParam param = reader.getDefaultReadParam();
-            param.setSourceRegion(region);
-            return reader.read(0, param);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

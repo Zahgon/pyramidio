@@ -15,7 +15,6 @@ import gov.nist.isg.pyramidio.tools.BufferedImageHelper;
 import java.awt.image.BufferedImage;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class NormalBlender implements Blender {
@@ -23,18 +22,16 @@ public class NormalBlender implements Blender {
     private final BufferedImage result;
 
     public NormalBlender(int width, int height, BufferedImage sampleImage) {
-        result = BufferedImageHelper.createBufferedImage(
-                width, height, sampleImage);
+        result = BufferedImageHelper.createBufferedImage(width, height, sampleImage);
     }
 
     @Override
     public void blend(BufferedImage image, int x, int y) {
-        result.getRaster().setRect(x, y, image.getRaster());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BufferedImage getResult() {
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

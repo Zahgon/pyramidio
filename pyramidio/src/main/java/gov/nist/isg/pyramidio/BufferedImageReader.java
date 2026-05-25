@@ -18,7 +18,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class BufferedImageReader implements PartialImageReader {
@@ -38,23 +37,21 @@ public class BufferedImageReader implements PartialImageReader {
 
     @Override
     public BufferedImage read() throws IOException {
-        return image;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BufferedImage read(Rectangle rectangle) throws IOException {
-        return image.getSubimage(rectangle.x, rectangle.y,
-                rectangle.width, rectangle.height);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getWidth() {
-        return image.getWidth();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getHeight() {
-        return image.getHeight();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

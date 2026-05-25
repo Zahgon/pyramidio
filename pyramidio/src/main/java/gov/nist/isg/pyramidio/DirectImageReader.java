@@ -29,65 +29,56 @@ import javax.imageio.stream.ImageInputStream;
 public class DirectImageReader implements PartialImageReader {
 
     private final File imageFile;
+
     private final Dimension dimension;
 
     public DirectImageReader(File imageFile) throws IOException {
-
         this.imageFile = imageFile;
         this.dimension = getImageDimension();
     }
 
     @Override
     public BufferedImage read() throws IOException {
-        return read(new Rectangle(0, 0, dimension.width, dimension.height));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BufferedImage read(Rectangle rectangle) throws IOException {
-        return readRegion(rectangle);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getWidth() {
-        return dimension.width;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getHeight() {
-        return dimension.height;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Dimension getImageDimension() throws IOException {
-
         return executeWithImageReader(new Function<Dimension>() {
+
             @Override
             public Dimension apply(ImageReader imageReader) throws IOException {
-                return new Dimension(
-                        imageReader.getWidth(0), imageReader.getHeight(0));
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         });
     }
 
-    private BufferedImage readRegion(final Rectangle rectangle)
-            throws IOException {
-
+    private BufferedImage readRegion(final Rectangle rectangle) throws IOException {
         return executeWithImageReader(new Function<BufferedImage>() {
-            @Override
-            public BufferedImage apply(ImageReader imageReader)
-                    throws IOException {
-                ImageReadParam param = imageReader.getDefaultReadParam();
-                param.setSourceRegion(rectangle);
 
-                return imageReader.read(0, param);
+            @Override
+            public BufferedImage apply(ImageReader imageReader) throws IOException {
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         });
     }
 
     private <T> T executeWithImageReader(Function<T> f) throws IOException {
-
-        try (ImageInputStream iis = ImageIO.createImageInputStream(
-                new FileInputStream(imageFile).getChannel())) {
-
+        try (ImageInputStream iis = ImageIO.createImageInputStream(new FileInputStream(imageFile).getChannel())) {
             Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
             if (readers.hasNext()) {
                 ImageReader reader = readers.next();

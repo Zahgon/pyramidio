@@ -24,7 +24,6 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class SequenceFileArchiver implements FilesArchiver {
@@ -35,45 +34,27 @@ public class SequenceFileArchiver implements FilesArchiver {
         this(new Path(filePath), new Configuration());
     }
 
-    public SequenceFileArchiver(Path filePath, Configuration conf)
-            throws IOException {
-        writer = SequenceFile.createWriter(conf,
-                SequenceFile.Writer.file(filePath),
-                SequenceFile.Writer.keyClass(Text.class),
-                SequenceFile.Writer.valueClass(BytesWritable.class));
+    public SequenceFileArchiver(Path filePath, Configuration conf) throws IOException {
+        writer = SequenceFile.createWriter(conf, SequenceFile.Writer.file(filePath), SequenceFile.Writer.keyClass(Text.class), SequenceFile.Writer.valueClass(BytesWritable.class));
     }
 
     @Override
-    public <T> T appendFile(String path, FilesArchiver.FileAppender<T> appender)
-            throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        T result = appender.append(baos);
-        BytesWritable bytes = new BytesWritable(baos.toByteArray());
-        writer.append(new Text(path), bytes);
-        return result;
+    public <T> T appendFile(String path, FilesArchiver.FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public <T> T appendBigFile(String path, FileAppender<T> appender)
-            throws IOException {
-        return appendFile(path, appender);
+    public <T> T appendBigFile(String path, FileAppender<T> appender) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void appendFile(String path, File file) throws IOException {
-        try (final FileInputStream fis = new FileInputStream(file)) {
-            appendFile(path, new FileAppender<Void>() {
-                @Override
-                public Void append(OutputStream outputStream) throws IOException {
-                    IOUtils.copy(fis, outputStream);
-                    return null;
-                }
-            });
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws IOException {
-        writer.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

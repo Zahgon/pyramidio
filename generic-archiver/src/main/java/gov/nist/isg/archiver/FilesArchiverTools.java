@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
  * @author Antoine Vandecreme
  */
 public class FilesArchiverTools {
@@ -30,9 +29,8 @@ public class FilesArchiverTools {
      * @param folder the folder to append in the archiver
      * @throws IOException if the folder can not be added
      */
-    public static void addFolderToArchive(FilesArchiver archiver, File folder)
-            throws IOException {
-        addFolderToArchive(archiver, folder, "");
+    public static void addFolderToArchive(FilesArchiver archiver, File folder) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -44,20 +42,7 @@ public class FilesArchiverTools {
      * @param basePath the base path under which the folder will be appended
      * @throws IOException if the folder can not be added
      */
-    public static void addFolderToArchive(FilesArchiver archiver, File folder,
-            String basePath) throws IOException {
-        if (!folder.isDirectory()) {
-            throw new IllegalArgumentException("Path " + folder + " is not a directory.");
-        }
-        File[] files = folder.listFiles();
-        for (File file : files) {
-            String filename = file.getName();
-            String concat = new File(basePath, filename).getPath();
-            if (file.isFile()) {
-                archiver.appendFile(concat, file);
-            } else if (file.isDirectory()) {
-                addFolderToArchive(archiver, file, concat);
-            }
-        }
+    public static void addFolderToArchive(FilesArchiver archiver, File folder, String basePath) throws IOException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }
